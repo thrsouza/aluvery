@@ -1,8 +1,8 @@
 package com.thiagosouza.aluvery.ui.components
 
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,20 +26,16 @@ fun ProductsSection(
             lineHeight = 24.2.sp,
             modifier = Modifier.padding(start = 16.dp)
         )
-        Row(
+        LazyRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp),
             modifier = Modifier
                 .padding(top = 8.dp)
                 .fillMaxWidth()
-                .horizontalScroll(state = rememberScrollState())
         ) {
-            Spacer(Modifier)
-
-            for (product in products) {
+            items(products) { product ->
                 ProductItem(product = product)
             }
-
-            Spacer(Modifier)
         }
     }
 }

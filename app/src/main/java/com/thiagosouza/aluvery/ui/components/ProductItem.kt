@@ -1,6 +1,5 @@
 package com.thiagosouza.aluvery.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -20,11 +19,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.thiagosouza.aluvery.R
 import com.thiagosouza.aluvery.extensions.toBrazilianCurrency
 import com.thiagosouza.aluvery.models.Product
-import com.thiagosouza.aluvery.ui.theme.Purple500
-import com.thiagosouza.aluvery.ui.theme.Teal200
+import com.thiagosouza.aluvery.ui.theme.Indigo400
+import com.thiagosouza.aluvery.ui.theme.Indigo500
 import java.math.BigDecimal
 
 
@@ -49,19 +49,20 @@ fun ProductItem(product: Product) {
                     .height(100.dp)
                     .background(
                         brush = Brush.horizontalGradient(
-                            colors = listOf(Purple500, Teal200)
+                            colors = listOf(Indigo500, Indigo400)
                         )
                     )
             ) {
-                Image(
-                    painter = painterResource(id = product.image),
-                    contentDescription = null,
+                AsyncImage(
+                    model = product.image,
+                    contentDescription = product.name,
                     Modifier
+                        .size(imageSize)
                         .offset(y = imageSize / 2)
-                        .size(size = imageSize)
                         .clip(shape = CircleShape)
-                        .align(alignment = BottomCenter),
+                        .align(BottomCenter),
                     contentScale = ContentScale.Crop,
+                    placeholder = painterResource(id = R.drawable.placeholder)
                 )
             }
             Column(
@@ -96,8 +97,7 @@ private fun ProductItemPreview() {
         ProductItem(
             Product(
                 name = LoremIpsum(50).values.first(),
-                price = BigDecimal("14.99"),
-                image = R.drawable.placeholder
+                price = BigDecimal("99.99"),
             )
         )
     }
