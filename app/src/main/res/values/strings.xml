@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Aluvery</string>
+    <string name="search_label">Produto</string>
+    <string name="search_placeholder">O que você procura?</string>
 </resources>

@@ -29,10 +29,14 @@ import java.math.BigDecimal
 
 
 @Composable
-fun ProductItem(product: Product) {
+fun ProductItem(
+    product: Product,
+    modifier: Modifier = Modifier,
+) {
     Card(
         shape = RoundedCornerShape(12.dp),
-        elevation = 4.dp
+        elevation = 4.dp,
+        modifier = modifier
     ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,

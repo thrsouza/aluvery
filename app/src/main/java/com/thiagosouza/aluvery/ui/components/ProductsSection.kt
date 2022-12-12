@@ -16,9 +16,12 @@ import com.thiagosouza.aluvery.sampledata.sampleProducts
 @Composable
 fun ProductsSection(
     title: String,
-    products: List<Product>
+    products: List<Product>,
+    modifier: Modifier = Modifier,
 ) {
-    Column {
+    Column(
+        modifier = modifier,
+    ) {
         Text(
             text = title,
             fontSize = 20.sp,
