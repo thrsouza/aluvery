@@ -24,7 +24,7 @@ class HomeScreenUiState(
     val searchValue: String = "",
     val onSearchValueChange: (String) -> Unit = {}
 ) {
-    fun isShowSections(): Boolean {
+    fun isToShowTheSections(): Boolean {
         return searchValue.isBlank()
     }
 }
@@ -58,7 +58,7 @@ fun HomeScreen(products: List<Product>) {
         } + products.filter(containsInNameOrDescription())
     }
 
-    val homeScreenUiState = remember(products, searchValue) {
+    val state = remember(products, searchValue) {
         HomeScreenUiState(
             sections = sections,
             searchValue = searchValue,
@@ -69,7 +69,7 @@ fun HomeScreen(products: List<Product>) {
         )
     }
 
-    HomeScreen(state = homeScreenUiState)
+    HomeScreen(state = state)
 }
 
 @Composable
@@ -94,7 +94,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize(),
         ) {
-            if (state.isShowSections()) {
+            if (state.isToShowTheSections()) {
                 for (section in sections) {
                     item {
                         val title = section.key
