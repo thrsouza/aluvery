@@ -1,6 +1,5 @@
 package com.thiagosouza.aluvery.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,38 +10,82 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.thiagosouza.aluvery.R
 import com.thiagosouza.aluvery.models.Product
+import com.thiagosouza.aluvery.sampledata.sampleCandies
+import com.thiagosouza.aluvery.sampledata.sampleDrinks
 import com.thiagosouza.aluvery.sampledata.sampleProducts
 import com.thiagosouza.aluvery.sampledata.sampleSections
 import com.thiagosouza.aluvery.ui.components.CardProductItem
 import com.thiagosouza.aluvery.ui.components.ProductsSection
 import com.thiagosouza.aluvery.ui.components.SearchTextField
 
+class HomeScreenUiState(
+    val sections: Map<String, List<Product>> = emptyMap(),
+    val searchedProducts: List<Product> = emptyList(),
+    val searchValue: String = "",
+    val onSearchValueChange: (String) -> Unit = {}
+) {
+    fun isShowSections(): Boolean {
+        return searchValue.isBlank()
+    }
+}
+
+@Composable
+fun HomeScreen(products: List<Product>) {
+    val sections = mapOf(
+        stringResource(id = R.string.section_all_products) to products,
+        stringResource(id = R.string.section_offers) to sampleDrinks + sampleCandies,
+        stringResource(id = R.string.section_candies) to sampleCandies,
+        stringResource(id = R.string.section_drinks) to sampleDrinks,
+    )
+
+    var searchValue by remember { mutableStateOf("") }
+
+    fun containsInNameOrDescription() = { product: Product ->
+        product.name.contains(
+            searchValue,
+            ignoreCase = true,
+        ) || product.description?.contains(
+            searchValue,
+            ignoreCase = true,
+        ) ?: false
+    }
+
+    val searchedProducts = remember(products, searchValue) {
+        if (searchValue.isNotBlank()) {
+            sampleProducts.filter(containsInNameOrDescription())
+        } else {
+            emptyList()
+        } + products.filter(containsInNameOrDescription())
+    }
+
+    val homeScreenUiState = remember(products, searchValue) {
+        HomeScreenUiState(
+            sections = sections,
+            searchValue = searchValue,
+            onSearchValueChange = { newValue ->
+                searchValue = newValue
+            },
+            searchedProducts = searchedProducts,
+        )
+    }
+
+    HomeScreen(state = homeScreenUiState)
+}
+
 @Composable
 fun HomeScreen(
-    sections: Map<String, List<Product>>,
-    searchTextValue: String = ""
+    state: HomeScreenUiState = HomeScreenUiState(),
 ) {
-    var userSearchTextValue by remember { mutableStateOf(searchTextValue) }
-    val searchedProducts = remember(userSearchTextValue) {
-        sampleProducts.filter { product ->
-            product.name.contains(
-                userSearchTextValue,
-                ignoreCase = true,
-            ) || product.description?.contains(
-                userSearchTextValue,
-                ignoreCase = true,
-            ) ?: false
-        }
-    }
+    val sections = state.sections
+    val searchValue = state.searchValue
+    val searchedProducts = state.searchedProducts
 
     Column {
         SearchTextField(
             label = stringResource(id = R.string.search_label),
             placeholder = stringResource(id = R.string.search_placeholder),
-            value = userSearchTextValue,
-            onValueChanged = { newValue ->
-                userSearchTextValue = newValue
-            }
+            value = searchValue,
+            onValueChanged = state.onSearchValueChange
         )
 
         LazyColumn(
@@ -51,7 +94,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize(),
         ) {
-            if (userSearchTextValue.isBlank()) {
+            if (state.isShowSections()) {
                 for (section in sections) {
                     item {
                         val title = section.key
@@ -80,11 +123,18 @@ fun HomeScreen(
 @Preview(showSystemUi = true)
 @Composable
 private fun HomeScreenPreview() {
-    HomeScreen(sampleSections)
+    HomeScreen(
+        HomeScreenUiState(sections = sampleSections)
+    )
 }
 
 @Preview(showSystemUi = true)
 @Composable
 private fun HomeScreenWithSearchTextPreview() {
-    HomeScreen(sampleSections, searchTextValue = "Lorem")
+    HomeScreen(
+        HomeScreenUiState(
+            sections = sampleSections,
+            searchValue = "Lorem",
+        )
+    )
 }

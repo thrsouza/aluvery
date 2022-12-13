@@ -2,4 +2,15 @@
     <string name="app_name">Aluvery</string>
     <string name="search_label">Produto</string>
     <string name="search_placeholder">O que você procura?</string>
+    <string name="creating_product">Criando o produto</string>
+    <string name="save">Salvar</string>
+    <string name="product_image_url">Url da imagem</string>
+    <string name="product_name">Nome</string>
+    <string name="product_price">Preço</string>
+    <string name="product_description">Descrição</string>
+    <string name="create_product">Criar produto</string>
+    <string name="section_all_products">Todos os produtos</string>
+    <string name="section_offers">Promoções</string>
+    <string name="section_candies">Doces</string>
+    <string name="section_drinks">Bebidas</string>
 </resources>

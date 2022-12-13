@@ -3,7 +3,7 @@ package com.thiagosouza.aluvery.models
 import androidx.annotation.DrawableRes
 import java.math.BigDecimal
 
-class Product(
+data class Product(
     val name: String,
     val price: BigDecimal,
     val description: String? = null,
